@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cric360AI</title>
+    <meta name="description" content="AI-Powered Cricket Intelligence platform. Ask any cricket question and get instant insights.">
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-content">
+            <div class="logo">
+                <span class="logo-text">Cric<span class="highlight">360</span>AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#categories">Categories</a>
+                <button id="adminBtn" class="btn btn-outline">Knowledge Base</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <h1 class="hero-title animate-up">AI-Powered Cricket Intelligence</h1>
+            <p class="hero-subtitle animate-up delay-1">Ask any cricket question and get instant insights powered by AI and comprehensive cricket knowledge.</p>
+            
+            <!-- AI Search Interface -->
+            <div class="search-section animate-up delay-2">
+                <form id="askForm" class="search-form">
+                    <div class="input-group">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <input type="text" id="questionInput" placeholder="Ask anything about cricket... (e.g., Explain LBW rule)" autocomplete="off" required>
+                        <button type="submit" class="btn btn-primary" id="searchBtn">
+                            <span class="btn-text">Analyze</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="search-examples">
+                    <span class="example-tag">What is a googly?</span>
+                    <span class="example-tag">Explain LBW rule</span>
+                    <span class="example-tag">Difference between T20 and ODI</span>
+                </div>
+
+                <!-- Result Card -->
+                <div id="resultContainer" class="result-card hidden">
+                    <div class="result-header">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <h3>AI Insight</h3>
+                    </div>
+                    <div id="answerContent" class="result-content"></div>
+                    <div id="sourcesContainer" class="sources-container hidden">
+                        <h4>Sources:</h4>
+                        <ul id="sourcesList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <!-- Statistics Section -->
+    <section class="statistics section dark-section">
+        <div class="container">
+            <div class="grid stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="5000">0</div>
+                    <div class="stat-label">Cricket Concepts</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="10000">0</div>
+                    <div class="stat-label">Search Queries</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Instant</div>
+                    <div class="stat-label">AI Responses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="99">0</div>
+                    <div class="stat-label">% Accuracy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories section">
+        <div class="container">
+            <h2 class="section-title">Explore Topics</h2>
+            <div class="categories-container">
+                <div class="category-pill">Batting</div>
+                <div class="category-pill">Bowling</div>
+                <div class="category-pill">Fielding</div>
+                <div class="category-pill">Rules</div>
+                <div class="category-pill">Formats</div>
+                <div class="category-pill">Strategies</div>
+                <div class="category-pill">Umpiring</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>Cric<span class="highlight">360</span>AI</h3>
+                <p>Premium cricket intelligence for enthusiasts and professionals.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#features">Features</a>
+                <a href="#" id="footerAdminBtn">Knowledge Base</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-social">
+                <!-- Social Icons -->
+                <a href="#" class="social-icon">𝕏</a>
+                <a href="#" class="social-icon">in</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Cric360AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Admin / Knowledge Base Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Knowledge Base Management</h2>
+                <button id="closeModalBtn" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- Upload Section -->
+                <div class="upload-section">
+                    <h3>Index New Document</h3>
+                    <form id="uploadForm" class="upload-form">
+                        <input type="file" id="fileInput" accept=".pdf,.txt,.docx" required>
+                        <button type="submit" class="btn btn-primary" id="uploadBtn">
+                            <span class="btn-text">Upload & Index</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </form>
+                    <div id="uploadStatus" class="status-message"></div>
+                </div>
+
+                <!-- Document List Section -->
+                <div class="documents-section">
+                    <div class="doc-header">
+                        <h3>Indexed Documents</h3>
+                        <button id="refreshDocsBtn" class="btn btn-outline btn-sm">Refresh</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="docs-table">
+                            <thead>
+                                <tr>
+                                    <th>Filename</th>
+                                    <th>Chunks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="docsTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                        <div id="docsLoading" class="hidden">Loading documents...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
