@@ -25,7 +25,7 @@ function initAnimations() {
 
 function initStatsCounters() {
     const counters = document.querySelectorAll('.stat-number[data-target]');
-    
+
     const observer = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -35,7 +35,7 @@ function initStatsCounters() {
                 const steps = 60;
                 const stepTime = duration / steps;
                 let current = 0;
-                
+
                 const timer = setInterval(() => {
                     current += Math.ceil(targetValue / steps);
                     if (current >= targetValue) {
@@ -45,7 +45,7 @@ function initStatsCounters() {
                         target.innerText = current;
                     }
                 }, stepTime);
-                
+
                 obs.unobserve(target);
             }
         });
@@ -84,7 +84,7 @@ function initSearch() {
         btn.disabled = true;
         resultContainer.classList.remove('hidden');
         sourcesContainer.classList.add('hidden');
-        
+
         answerContent.innerHTML = `
             <div class="skeleton-line"></div>
             <div class="skeleton-line"></div>
@@ -158,7 +158,7 @@ function initModal() {
 async function fetchDocuments() {
     const tableBody = document.getElementById('docsTableBody');
     const loading = document.getElementById('docsLoading');
-    
+
     tableBody.innerHTML = '';
     loading.classList.remove('hidden');
 
@@ -198,7 +198,7 @@ function initUpload() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const file = fileInput.files[0];
         if (!file) return;
 
@@ -224,7 +224,7 @@ function initUpload() {
             status.classList.add('status-success');
             status.innerText = `Success: ${data.message} (${data.chunksCount} chunks)`;
             fileInput.value = ''; // Reset
-            
+
             // Refresh documents table
             fetchDocuments();
 

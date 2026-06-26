@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cric360AI</title>
-    <meta name="description" content="AI-Powered Cricket Intelligence platform. Ask any cricket question and get instant insights.">
+    <meta name="description"
+        content="AI-Powered Cricket Intelligence platform. Ask any cricket question and get instant insights.">
     <!-- Modern Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,6 +14,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="navbar">
@@ -32,14 +35,21 @@
         <div class="hero-bg"></div>
         <div class="container hero-content">
             <h1 class="hero-title animate-up">AI-Powered Cricket Intelligence</h1>
-            <p class="hero-subtitle animate-up delay-1">Ask any cricket question and get instant insights powered by AI and comprehensive cricket knowledge.</p>
-            
+            <p class="hero-subtitle animate-up delay-1">Ask any cricket question and get instant insights powered by AI
+                and comprehensive cricket knowledge.</p>
+
             <!-- AI Search Interface -->
             <div class="search-section animate-up delay-2">
                 <form id="askForm" class="search-form">
                     <div class="input-group">
-                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        <input type="text" id="questionInput" placeholder="Ask anything about cricket..." autocomplete="off" required>
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="questionInput" placeholder="Ask anything about cricket..."
+                            autocomplete="off" required>
                         <button type="submit" class="btn btn-primary" id="searchBtn">
                             <span class="btn-text">Analyze</span>
                             <div class="spinner hidden"></div>
@@ -50,13 +60,16 @@
                 <div class="search-examples">
                     <span class="example-tag">What is a googly?</span>
                     <span class="example-tag">What is OFF DRIVE?</span>
-                    <span class="example-tag">Difference between T20 and ODI</span>
+                    <span class="example-tag">sweep</span>
                 </div>
 
                 <!-- Result Card -->
                 <div id="resultContainer" class="result-card hidden">
                     <div class="result-header">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
                         <h3>AI Insight</h3>
                     </div>
                     <div id="answerContent" class="result-content"></div>
@@ -71,45 +84,9 @@
 
 
 
-    <!-- Statistics Section -->
-    <section class="statistics section dark-section">
-        <div class="container">
-            <div class="grid stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number" data-target="5000">0</div>
-                    <div class="stat-label">Cricket Concepts</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" data-target="10000">0</div>
-                    <div class="stat-label">Search Queries</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">Instant</div>
-                    <div class="stat-label">AI Responses</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" data-target="99">0</div>
-                    <div class="stat-label">% Accuracy</div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- Categories Section -->
-    <section id="categories" class="categories section">
-        <div class="container">
-            <h2 class="section-title">Explore Topics</h2>
-            <div class="categories-container">
-                <div class="category-pill">Batting</div>
-                <div class="category-pill">Bowling</div>
-                <div class="category-pill">Fielding</div>
-                <div class="category-pill">Rules</div>
-                <div class="category-pill">Formats</div>
-                <div class="category-pill">Strategies</div>
-                <div class="category-pill">Umpiring</div>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -120,7 +97,7 @@
             </div>
             <div class="footer-links">
                 <a href="#">Home</a>
-               
+
                 <a href="#" id="footerAdminBtn">Knowledge Base</a>
                 <a href="#">Contact</a>
             </div>
@@ -142,7 +119,7 @@
                 <h2>Knowledge Base Management</h2>
                 <button id="closeModalBtn" class="close-btn">&times;</button>
             </div>
-            
+
             <div class="modal-body">
                 <!-- Upload Section -->
                 <div class="upload-section">
@@ -184,4 +161,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
