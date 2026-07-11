@@ -636,6 +636,12 @@ a {
     margin-bottom: 16px;
 }
 
+.docs-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .docs-table {
     width: 100%;
     border-collapse: collapse;
@@ -747,12 +753,21 @@ a {
    Media Queries
    ========================================= */
 @media (max-width: 768px) {
+    .hero {
+        padding-top: calc(var(--nav-height) + 20px);
+        padding-bottom: 60px;
+    }
+
     .hero-title {
-        font-size: 3rem;
+        font-size: 2.75rem;
+    }
+
+    #navHomeLink {
+        display: none;
     }
 
     .nav-links {
-        display: none;
+        gap: 1rem;
     }
 
     .input-group {
@@ -779,10 +794,101 @@ a {
     .footer-content {
         flex-direction: column;
         text-align: center;
+        gap: 20px;
+    }
+
+    .footer-links {
+        justify-content: center;
+        margin: 10px 0;
+        gap: 20px;
     }
 
     .upload-form {
         flex-direction: column;
+    }
+
+    /* Dashboard Layout Mobile */
+    .dashboard-nav {
+        gap: 6px;
+        padding: 6px;
+    }
+
+    .dashboard-tab-btn {
+        font-size: 0.9rem;
+        padding: 10px 6px;
+        gap: 4px;
+    }
+
+    .dashboard-tab-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Chat Panel Mobile adjustments */
+    .chat-card {
+        padding: 16px 12px;
+        min-height: 480px;
+    }
+
+    .chat-history-container {
+        max-height: 320px;
+    }
+
+    .message-bubble {
+        max-width: 90%;
+        padding: 10px 14px;
+        font-size: 0.92rem;
+    }
+
+    /* Quiz results panel mobile */
+    .results-summary {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .results-footer {
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .results-footer .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .logo-text {
+        font-size: 1.25rem;
+    }
+
+    .hero-title {
+        font-size: 2.1rem;
+        letter-spacing: -0.5px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
+
+    .auth-card {
+        padding: 20px 16px;
+    }
+
+    .auth-tabs {
+        margin-bottom: 16px;
+    }
+
+    .dashboard-tab-btn {
+        font-size: 0.8rem;
+        padding: 8px 4px;
     }
 }
 
