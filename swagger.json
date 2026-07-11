@@ -1,0 +1,555 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cricket Knowledge RAG Chatbot API",
+        "version": "1.0.0",
+        "description": "API documentation for the Cricket Knowledge RAG (Retrieval-Augmented Generation) Chatbot. This backend parses documents (PDF, DOCX, TXT), chunks them, embeds them with the Gemini API, stores them in MongoDB Atlas, performs Vector Search, manages phone authentication, and provides personalized quizzes with score points."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000",
+            "description": "Local Development Server"
+        }
+    ],
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "summary": "Register a new user directly",
+                "description": "Registers a new phone number and name. No OTP required to register. Fails if user is already registered.",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+1234567890",
+                                        "description": "User phone number in E.164 format."
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Cricket Fan",
+                                        "description": "User full name."
+                                    }
+                                },
+                                "required": [
+                                    "phoneNumber",
+                                    "name"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User registered successfully. You can now login."
+                                        },
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "cricPoints": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request (e.g. user already registered or missing parameters)."
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "summary": "Request login OTP for phone number",
+                "description": "Verifies that the phone number is registered, generates a mock OTP, logs it to console, and stores it for verification. Fails if user does not exist.",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    }
+                                },
+                                "required": [
+                                    "phoneNumber"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OTP generated successfully and logged to console.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "OTP generated and logged to backend console successfully."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "User is not registered, or invalid phone number."
+                    }
+                }
+            }
+        },
+        "/auth/verify-otp": {
+            "post": {
+                "summary": "Verify OTP and complete login",
+                "description": "Verifies the 6-digit OTP generated for the phone number. Returns JWT token for authorization.",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "phoneNumber": {
+                                        "type": "string",
+                                        "example": "+1234567890"
+                                    },
+                                    "otp": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "required": [
+                                    "phoneNumber",
+                                    "otp"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful. JWT token issued.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR5..."
+                                        },
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "cricPoints": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or expired OTP."
+                    }
+                }
+            }
+        },
+        "/auth/profile": {
+            "get": {
+                "summary": "Get authenticated user profile and quiz history",
+                "description": "Retrieves the user's information, cumulative Cric Points, and history of previous quiz attempts.",
+                "responses": {
+                    "200": {
+                        "description": "Profile data retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "user": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "phoneNumber": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "cricPoints": {
+                                                    "type": "integer"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            }
+                                        },
+                                        "attempts": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "quizId": {
+                                                        "type": "string"
+                                                    },
+                                                    "score": {
+                                                        "type": "integer"
+                                                    },
+                                                    "pointsEarned": {
+                                                        "type": "integer"
+                                                    },
+                                                    "completedAt": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized token."
+                    }
+                }
+            }
+        },
+        "/upload": {
+            "post": {
+                "summary": "Upload and index a Cricket document",
+                "description": "Uploads a PDF, DOCX, or TXT file. The server extracts the raw text, splits it into chunks of 500-1000 characters (with 100 character overlap), generates 768-dimensional embeddings using Gemini, and saves them to MongoDB Atlas for vector search.",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "The file to upload (PDF, DOCX, or TXT format)."
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Document parsed, embedded, and indexed successfully."
+                    },
+                    "400": {
+                        "description": "Bad Request."
+                    },
+                    "500": {
+                        "description": "Internal Server Error."
+                    }
+                }
+            }
+        },
+        "/ask": {
+            "post": {
+                "summary": "Ask a cricket question (Authenticated)",
+                "description": "Queries the vector database using semantic search, constructs context, generates a response from Gemini, and saves the interaction to the user's history.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "question": {
+                                        "type": "string",
+                                        "example": "Why is a googly difficult to play?"
+                                    },
+                                    "history": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "user"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "Hello"
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "question"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Answer generated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "answer": {
+                                            "type": "string"
+                                        },
+                                        "sources": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "filename": {
+                                                        "type": "string"
+                                                    },
+                                                    "chunkId": {
+                                                        "type": "integer"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
+        },
+        "/documents": {
+            "get": {
+                "summary": "List all uploaded files and chunk counts",
+                "description": "Queries MongoDB Atlas to list indexed documents with their chunk count.",
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "List of documents."
+                    }
+                }
+            }
+        },
+        "/quiz/active": {
+            "get": {
+                "summary": "Get user's active personalized quiz",
+                "description": "Retrieves the active generated quiz or triggers batch generation of 10 new questions if user's ask history changed. Reuses cached context chunks.",
+                "responses": {
+                    "200": {
+                        "description": "Quiz retrieved successfully (answers omitted).",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "quizId": {
+                                            "type": "string"
+                                        },
+                                        "questions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "questionText": {
+                                                        "type": "string"
+                                                    },
+                                                    "options": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "cached": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request (e.g. user history empty)."
+                    }
+                }
+            }
+        },
+        "/quiz/submit": {
+            "post": {
+                "summary": "Submit quiz answers and earn points",
+                "description": "Grades the submitted answers on the server side, calculates score (+5 per correct, -1 per wrong), updates cumulative Cric Points, and logs the attempt.",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "quizId": {
+                                        "type": "string"
+                                    },
+                                    "answers": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "questionId": {
+                                                    "type": "string"
+                                                },
+                                                "selectedOptionIndex": {
+                                                    "type": "integer",
+                                                    "minimum": 0,
+                                                    "maximum": 3
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "quizId",
+                                    "answers"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Quiz graded successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "attemptId": {
+                                            "type": "string"
+                                        },
+                                        "score": {
+                                            "type": "integer"
+                                        },
+                                        "totalQuestions": {
+                                            "type": "integer"
+                                        },
+                                        "pointsEarned": {
+                                            "type": "integer"
+                                        },
+                                        "cumulativePoints": {
+                                            "type": "integer"
+                                        },
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "questionId": {
+                                                        "type": "string"
+                                                    },
+                                                    "questionText": {
+                                                        "type": "string"
+                                                    },
+                                                    "options": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "selectedOptionIndex": {
+                                                        "type": "integer"
+                                                    },
+                                                    "correctOptionIndex": {
+                                                        "type": "integer"
+                                                    },
+                                                    "isCorrect": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "explanation": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

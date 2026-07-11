@@ -23,9 +23,12 @@
                 <span class="logo-text">Cric<span class="highlight">360</span>AI</span>
             </div>
             <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#categories">Categories</a>
-                <button id="adminBtn" class="btn btn-outline">Knowledge Base</button>
+                <a href="#" id="navHomeLink">Home</a>
+                <div id="navUserInfo" class="nav-user-info hidden">
+                    <div id="profileChip" class="profile-avatar-initials">
+                        <span id="navUserInitials">??</span>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -35,48 +38,244 @@
         <div class="hero-bg"></div>
         <div class="container hero-content">
             <h1 class="hero-title animate-up">AI-Powered Cricket Intelligence</h1>
-            <p class="hero-subtitle animate-up delay-1">Ask any cricket question and get instant insights powered by AI
-                and comprehensive cricket knowledge.</p>
+            <p class="hero-subtitle animate-up delay-1">Ask any cricket question, challenge yourself with personalized
+                quizzes, and build your Cric Points!</p>
 
-            <!-- AI Search Interface -->
-            <div class="search-section animate-up delay-2">
-                <form id="askForm" class="search-form">
-                    <div class="input-group">
-                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input type="text" id="questionInput" placeholder="Ask anything about cricket..."
-                            autocomplete="off" required>
-                        <button type="submit" class="btn btn-primary" id="searchBtn">
-                            <span class="btn-text">Analyze</span>
+            <!-- Authentication Card (Visible when logged out) -->
+            <div id="authSection" class="auth-section animate-up delay-2">
+                <div class="glass-card auth-card">
+                    <div class="auth-tabs">
+                        <button id="loginTabBtn" class="auth-tab-btn active">Login</button>
+                        <button id="registerTabBtn" class="auth-tab-btn">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form-content">
+                        <div class="form-group">
+                            <label for="loginPhone">Phone Number</label>
+                            <div class="phone-input-container">
+                                <select id="loginCountryCode" class="country-code-select">
+                                    <option value="+1" selected>🇺🇸 +1</option>
+                                    <option value="+91">🇮🇳 +91</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                    <option value="+92">🇵🇰 +92</option>
+                                    <option value="+880">🇧🇩 +880</option>
+                                    <option value="+94">🇱🇰 +94</option>
+                                    <option value="+27">🇿🇦 +27</option>
+                                    <option value="+64">🇳🇿 +64</option>
+                                    <option value="+971">🇦🇪 +971</option>
+                                </select>
+                                <input type="tel" id="loginPhone" placeholder="1234567890" required autocomplete="off">
+                            </div>
+                            <small class="form-help">Select country code and enter your registered phone number.</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-full" id="loginSubmitBtn">
+                            <span class="btn-text">Request OTP</span>
                             <div class="spinner hidden"></div>
                         </button>
-                    </div>
-                </form>
+                    </form>
 
-                <div class="search-examples">
-                    <span class="example-tag">What is a googly?</span>
-                    <span class="example-tag">What is OFF DRIVE?</span>
-                    <span class="example-tag">sweep</span>
+                    <!-- Register Form -->
+                    <form id="registerForm" class="auth-form-content hidden">
+                        <div class="form-group">
+                            <label for="registerName">Full Name</label>
+                            <input type="text" id="registerName" placeholder="Cricket Enthusiast" required
+                                autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPhone">Phone Number</label>
+                            <div class="phone-input-container">
+                                <select id="registerCountryCode" class="country-code-select">
+                                    <option value="+1" selected>🇺🇸 +1</option>
+                                    <option value="+91">🇮🇳 +91</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                    <option value="+61">🇦🇺 +61</option>
+                                    <option value="+92">🇵🇰 +92</option>
+                                    <option value="+880">🇧🇩 +880</option>
+                                    <option value="+94">🇱🇰 +94</option>
+                                    <option value="+27">🇿🇦 +27</option>
+                                    <option value="+64">🇳🇿 +64</option>
+                                    <option value="+971">🇦🇪 +971</option>
+                                </select>
+                                <input type="tel" id="registerPhone" placeholder="1234567890" required
+                                    autocomplete="off">
+                            </div>
+                            <small class="form-help">Select country code and enter number (e.g. 1234567890)</small>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-full" id="registerSubmitBtn">
+                            <span class="btn-text">Register Account</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </form>
+
+                    <!-- OTP Verification Form (Shown after login OTP is requested) -->
+                    <form id="otpForm" class="auth-form-content hidden">
+                        <div class="form-group">
+                            <label for="otpInput">Enter 6-Digit OTP</label>
+                            <input type="text" id="otpInput" maxlength="6" pattern="\d{6}" placeholder="123456" required
+                                autocomplete="off">
+                            <div class="otp-instruction-alert">
+                                💡 <strong>Mock OTP:</strong> Check the terminal console where the backend server is
+                                running to copy the generated OTP code.
+                            </div>
+                        </div>
+                        <div class="otp-actions">
+                            <button type="submit" class="btn btn-primary" id="otpSubmitBtn">
+                                <span class="btn-text">Verify & Login</span>
+                                <div class="spinner hidden"></div>
+                            </button>
+                            <button type="button" id="otpBackBtn" class="btn btn-outline">Back</button>
+                        </div>
+                    </form>
+
+                    <div id="authStatus" class="status-message"></div>
                 </div>
+            </div>
 
-                <!-- Result Card -->
-                <div id="resultContainer" class="result-card hidden">
-                    <div class="result-header">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2">
+            <!-- Tabbed Dashboard (Visible when logged in) -->
+            <div id="dashboardSection" class="dashboard-section animate-up delay-2 hidden">
+                <div class="dashboard-nav glass-card">
+                    <button id="tabChatBtn" class="dashboard-tab-btn active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
-                        <h3>AI Insight</h3>
+                        AI Chatbot
+                    </button>
+                    <button id="tabQuizBtn" class="dashboard-tab-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        Personalized Quiz
+                    </button>
+
+                </div>
+
+                <!-- Tab Panels -->
+                <div class="dashboard-content">
+
+                    <!-- Chat Tab Panel -->
+                    <div id="chatPanel" class="tab-panel active">
+                        <div class="glass-card chat-card">
+                            <div class="chat-header-actions"
+                                style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+                                <button id="newChatBtn" class="btn btn-outline btn-sm">💬 New Chat</button>
+                            </div>
+                            <!-- Chat Messages Window -->
+                            <div id="chatHistory" class="chat-history-container">
+                                <div class="message message-bot">
+                                    <div class="message-bubble">
+                                        Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about
+                                        cricket and I'll retrieve answers from our knowledge base documents.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Search Form -->
+                            <form id="askForm" class="search-form">
+                                <div class="input-group">
+                                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                    </svg>
+                                    <input type="text" id="questionInput" placeholder="Ask anything about cricket..."
+                                        autocomplete="off" required>
+                                    <button type="submit" class="btn btn-primary" id="searchBtn">
+                                        <span class="btn-text">Send</span>
+                                        <div class="spinner hidden"></div>
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div class="search-examples">
+                                <span class="example-tag">What is a googly?</span>
+                                <span class="example-tag">What is OFF DRIVE?</span>
+                                <span class="example-tag">sweep</span>
+                            </div>
+                        </div>
                     </div>
-                    <div id="answerContent" class="result-content"></div>
-                    <div id="sourcesContainer" class="sources-container hidden">
-                        <h4>Sources:</h4>
-                        <ul id="sourcesList"></ul>
+
+                    <!-- Quiz Tab Panel -->
+                    <div id="quizPanel" class="tab-panel">
+                        <div class="glass-card quiz-card">
+                            <!-- Quiz Welcome / Empty State -->
+                            <div id="quizIntro" class="quiz-state-content text-center">
+                                <div class="quiz-icon-wrapper">🎯</div>
+                                <h2>Cric360 Personalized Quiz</h2>
+                                <p>Test your cricket knowledge! We generate personalized quizzes of 10 questions using
+                                    the document context of your recent questions.</p>
+                                <button id="startQuizBtn" class="btn btn-primary">Generate Quiz</button>
+                                <div id="quizIntroStatus" class="status-message"></div>
+                            </div>
+
+                            <!-- Quiz Loading State -->
+                            <div id="quizLoading" class="quiz-state-content hidden text-center">
+                                <div class="loading-spinner-large"></div>
+                                <p>Generating your personalized quiz questions using Gemini LLM and cached chunks...
+                                    Please wait.</p>
+                            </div>
+
+                            <!-- Quiz Question View -->
+                            <div id="quizPlay" class="quiz-state-content hidden">
+                                <div class="quiz-progress-bar">
+                                    <div class="quiz-progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <div class="quiz-header-info">
+                                    <span id="quizQuestionNum">Question 1 of 10</span>
+                                </div>
+                                <div class="quiz-question-container">
+                                    <h3 id="quizQuestionText"></h3>
+                                    <div id="quizOptionsContainer" class="quiz-options">
+                                        <!-- Dynamic option cards -->
+                                    </div>
+                                </div>
+                                <div class="quiz-nav-actions">
+                                    <button id="quizPrevBtn" class="btn btn-outline" disabled>Previous</button>
+                                    <button id="quizNextBtn" class="btn btn-outline">Next</button>
+                                    <button id="quizSubmitBtn" class="btn btn-primary hidden">
+                                        <span class="btn-text">Submit Quiz</span>
+                                        <div class="spinner hidden"></div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quiz Results View -->
+                            <div id="quizResults" class="quiz-state-content hidden">
+                                <div class="results-summary glass-card">
+                                    <div class="result-score-circle">
+                                        <span id="resultScore">0/10</span>
+                                        <span class="sub-label">Correct</span>
+                                    </div>
+                                    <div class="result-stats">
+                                        <h2 id="resultTitle">Quiz Completed!</h2>
+                                        <div class="points-impact">
+                                            <span id="pointsDiff" class="points-positive">+0</span> Cric Points
+                                        </div>
+                                        <p>Your cumulative points: <strong id="resultCumulativePoints">0</strong> pts
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="review-section">
+                                    <h3>Detailed Review</h3>
+                                    <div id="resultsReviewContainer" class="results-review-list">
+                                        <!-- Dynamic result cards -->
+                                    </div>
+                                </div>
+
+                                <div class="results-footer text-center">
+                                    <button id="quizRetryBtn" class="btn btn-primary">Generate Another Quiz</button>
+                                    <button id="quizBackToChatBtn" class="btn btn-outline">Back to Chatbot</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -97,8 +296,6 @@
             </div>
             <div class="footer-links">
                 <a href="#">Home</a>
-
-                <a href="#" id="footerAdminBtn">Knowledge Base</a>
                 <a href="#">Contact</a>
             </div>
             <div class="footer-social">
@@ -155,6 +352,125 @@
                         <div id="docsLoading" class="hidden">Loading documents...</div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Left-Side Slide-in Profile Drawer -->
+    <div id="sidebarBackdrop" class="sidebar-backdrop hidden"></div>
+    <div id="profileSidebar" class="profile-sidebar">
+        <div class="sidebar-viewport">
+            <div class="sidebar-track" id="sidebarTrack">
+
+                <!-- Panel 1: Main Menu -->
+                <div class="sidebar-panel" id="sidebarMainPanel">
+                    <div class="sidebar-header">
+                        <div class="avatar-large" id="sidebarUserInitials">??</div>
+                        <div class="user-details">
+                            <h3 id="sidebarUserName">Cricket Fan</h3>
+                            <p id="sidebarUserPhone" class="user-phone">+1234567890</p>
+                            <p class="user-joined">Member since <span id="sidebarUserJoined">-</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Cric Points Gradient Card -->
+                    <div class="cric-points-card">
+                        <div class="points-card-body">
+                            <span class="points-card-label">Cric Points</span>
+                            <h2 class="points-card-value" id="pointsCardValue">0 pts</h2>
+                        </div>
+                        <div class="points-card-footer">
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="pointsCardProgress" style="width: 0%;"></div>
+                            </div>
+                            <span class="progress-label" id="pointsCardProgressLabel">0/100 to Silver</span>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar Navigation Menu -->
+                    <ul class="sidebar-menu">
+                        <li class="menu-item" data-target="points">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="8"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            Cric Points Breakdown
+                        </li>
+                        <li class="menu-item" data-target="history">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                            </svg>
+                            Quiz History
+                        </li>
+                        <li class="menu-item" data-target="chat-history">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Chat History
+                        </li>
+                        <li class="menu-item" data-target="stats">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                            Performance Stats
+                        </li>
+                        <li class="menu-item" data-target="settings">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"></circle>
+                                <path
+                                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z">
+                                </path>
+                            </svg>
+                            Settings
+                        </li>
+                        <li class="menu-item text-danger" id="sidebarLogoutBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                <polyline points="16 17 21 12 16 7"></polyline>
+                                <line x1="21" y1="12" x2="9" y2="12"></line>
+                            </svg>
+                            Logout
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Panel 2: Detail Sub-panels -->
+                <div class="sidebar-panel" id="sidebarDetailPanel">
+                    <div class="detail-header">
+                        <button id="detailBackBtn" class="detail-back-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Back to Profile
+                        </button>
+                        <h3 id="detailPanelTitle">Details</h3>
+                    </div>
+                    <div class="detail-content" id="detailPanelContent">
+                        <!-- Dynamic details rendered here -->
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
