@@ -1117,14 +1117,19 @@ function updateProfileDrawerUI() {
     }
 
     document.getElementById('pointsCardValue').innerText = `${points} pts`;
-    document.getElementById('pointsCardProgressLabel').innerText = rankInfo.label;
+    const progressLabelEl = document.getElementById('pointsCardProgressLabel');
+    if (progressLabelEl) {
+        progressLabelEl.innerText = rankInfo.label;
+    }
 
     const progressFill = document.getElementById('pointsCardProgress');
-    if (points >= 500) {
-        progressFill.style.width = '100%';
-    } else {
-        const percent = (points / rankInfo.nextPoints) * 100;
-        progressFill.style.width = `${percent}%`;
+    if (progressFill) {
+        if (points >= 500) {
+            progressFill.style.width = '100%';
+        } else {
+            const percent = (points / rankInfo.nextPoints) * 100;
+            progressFill.style.width = `${percent}%`;
+        }
     }
 }
 
