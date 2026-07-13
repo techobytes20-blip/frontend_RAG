@@ -621,6 +621,10 @@ a {
     font-size: 0.9rem;
 }
 
+#authStatus {
+    text-align: center;
+}
+
 .status-success {
     color: #4ade80;
 }
@@ -1010,16 +1014,7 @@ a {
     color: var(--text-secondary);
 }
 
-.otp-instruction-alert {
-    background: rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    color: #93c5fd;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    margin-top: 6px;
-}
+
 
 .otp-actions {
     display: flex;
