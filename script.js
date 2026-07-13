@@ -1145,7 +1145,6 @@ async function renderDrawerDetail(targetKey) {
             });
         }
         quizEarnings = Math.max(0, quizEarnings);
-        const otherPoints = Math.max(0, totalPoints - quizEarnings);
 
         contentEl.innerHTML = `
             <div class="points-breakdown-list">
@@ -1156,10 +1155,6 @@ async function renderDrawerDetail(targetKey) {
                 <div class="points-breakdown-row">
                     <span class="label">📝 Quiz Earned Points</span>
                     <span class="value">${quizEarnings} pts</span>
-                </div>
-                <div class="points-breakdown-row">
-                    <span class="label">🤖 AI Chat activity & System bonus</span>
-                    <span class="value">${otherPoints} pts</span>
                 </div>
             </div>
         `;
