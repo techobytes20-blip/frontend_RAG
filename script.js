@@ -734,11 +734,18 @@ function resetQuizUI() {
 async function startQuiz() {
     const quizIntro = document.getElementById('quizIntro');
     const quizLoading = document.getElementById('quizLoading');
+    const quizPlay = document.getElementById('quizPlay');
+    const quizResults = document.getElementById('quizResults');
     const introStatus = document.getElementById('quizIntroStatus');
 
     introStatus.className = 'status-message';
     introStatus.innerText = '';
+
+    // Hide other states to ensure a clean loading/play screen
     quizIntro.classList.add('hidden');
+    quizPlay.classList.add('hidden');
+    quizResults.classList.add('hidden');
+
     quizLoading.classList.remove('hidden');
 
     try {
