@@ -727,14 +727,6 @@ function appendMessage(role, text, sources = null, isError = false, msgId = null
 
     let contentHtml = `<div class="message-bubble" ${isError ? 'style="color: #f87171;"' : ''}>${escapeHTML(text)}`;
 
-    if (sources && sources.length > 0) {
-        const uniqueSources = [...new Set(sources.map(s => s.filename))];
-        contentHtml += `<div class="citations">Sources: `;
-        uniqueSources.forEach(src => {
-            contentHtml += `<span>📄 ${escapeHTML(src)}</span>`;
-        });
-        contentHtml += `</div>`;
-    }
     contentHtml += `</div>`;
 
     msgDiv.innerHTML = contentHtml;
