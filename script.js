@@ -497,9 +497,7 @@ function logout() {
     const chatHistoryEl = document.getElementById('chatHistory');
     chatHistoryEl.innerHTML = `
         <div class="message message-bot">
-            <div class="message-bubble">
-                Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.
-            </div>
+            <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.</div>
         </div>
     `;
 
@@ -569,9 +567,7 @@ function initChat() {
             const chatHistoryEl = document.getElementById('chatHistory');
             chatHistoryEl.innerHTML = `
                 <div class="message message-bot">
-                    <div class="message-bubble">
-                        Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.
-                    </div>
+                    <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.</div>
                 </div>
             `;
             ensureActiveSession();
