@@ -115,7 +115,10 @@
                             <label for="otpInput">Enter 6-Digit OTP</label>
                             <input type="text" id="otpInput" maxlength="6" pattern="\d{6}" placeholder="123456" required
                                 autocomplete="off">
-
+                            <div class="otp-help-row">
+                                <span class="form-help">Didn't receive code?</span>
+                                <button type="button" id="resendOtpBtn" class="resend-otp-btn" disabled>Resend in 30s</button>
+                            </div>
                         </div>
                         <div class="otp-actions">
                             <button type="submit" class="btn btn-primary" id="otpSubmitBtn">
@@ -164,8 +167,7 @@
                             <!-- Chat Messages Window -->
                             <div id="chatHistory" class="chat-history-container">
                                 <div class="message message-bot">
-                                    <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask
-                                        me anything about cricket .</div>
+                                    <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket.</div>
                                 </div>
                             </div>
 

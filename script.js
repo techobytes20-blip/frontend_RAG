@@ -149,6 +149,31 @@ function initAuth() {
     const otpBackBtn = document.getElementById('otpBackBtn');
     const authStatus = document.getElementById('authStatus');
     const navHomeLink = document.getElementById('navHomeLink');
+    const resendOtpBtn = document.getElementById('resendOtpBtn');
+
+    let resendTimer = null;
+    let resendCountdown = 30;
+
+    function startResendTimer() {
+        if (resendTimer) {
+            clearInterval(resendTimer);
+        }
+        resendCountdown = 30;
+        resendOtpBtn.disabled = true;
+        resendOtpBtn.innerText = `Resend in ${resendCountdown}s`;
+
+        resendTimer = setInterval(() => {
+            resendCountdown--;
+            if (resendCountdown <= 0) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+                resendOtpBtn.disabled = false;
+                resendOtpBtn.innerText = 'Resend OTP';
+            } else {
+                resendOtpBtn.innerText = `Resend in ${resendCountdown}s`;
+            }
+        }, 1000);
+    }
 
     // Left profile drawer triggers
     const profileChip = document.getElementById('profileChip');
@@ -237,6 +262,9 @@ function initAuth() {
             authStatus.className = 'status-message status-success';
             authStatus.innerText = 'Success: ' + data.message;
             document.getElementById('otpInput').focus();
+
+            // Start resend timer
+            startResendTimer();
 
         } catch (error) {
             authStatus.className = 'status-message status-error';
@@ -339,6 +367,12 @@ function initAuth() {
             localStorage.setItem('token', token);
             tempPhoneForLogin = '';
 
+            // Clear resend timer
+            if (resendTimer) {
+                clearInterval(resendTimer);
+                resendTimer = null;
+            }
+
             // Clean form
             document.getElementById('otpInput').value = '';
             document.getElementById('loginPhone').value = '';
@@ -358,11 +392,52 @@ function initAuth() {
 
     // OTP Back Button Click
     otpBackBtn.addEventListener('click', () => {
+        if (resendTimer) {
+            clearInterval(resendTimer);
+            resendTimer = null;
+        }
         document.querySelector('.auth-tabs').classList.remove('hidden');
         loginForm.classList.remove('hidden');
         otpForm.classList.add('hidden');
         authStatus.className = 'status-message';
         authStatus.innerText = '';
+    });
+
+    // Resend OTP Button Click
+    resendOtpBtn.addEventListener('click', async () => {
+        if (!tempPhoneForLogin || resendCountdown > 0) return;
+
+        resendOtpBtn.disabled = true;
+        resendOtpBtn.innerText = 'Sending...';
+        authStatus.className = 'status-message';
+        authStatus.innerText = '';
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phoneNumber: tempPhoneForLogin })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to resend login OTP.');
+            }
+
+            authStatus.className = 'status-message status-success';
+            authStatus.innerText = 'Success: ' + (data.message || 'OTP resent successfully.');
+            
+            // Restart countdown
+            startResendTimer();
+
+        } catch (error) {
+            authStatus.className = 'status-message status-error';
+            authStatus.innerText = error.message;
+            // Re-enable button on error so user can retry
+            resendOtpBtn.disabled = false;
+            resendOtpBtn.innerText = 'Resend OTP';
+        }
     });
 
     // Home Navbar Link click
@@ -497,7 +572,7 @@ function logout() {
     const chatHistoryEl = document.getElementById('chatHistory');
     chatHistoryEl.innerHTML = `
         <div class="message message-bot">
-            <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.</div>
+            <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket.</div>
         </div>
     `;
 
@@ -567,7 +642,7 @@ function initChat() {
             const chatHistoryEl = document.getElementById('chatHistory');
             chatHistoryEl.innerHTML = `
                 <div class="message message-bot">
-                    <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket and I'll retrieve answers from our knowledge base documents.</div>
+                    <div class="message-bubble">Hello! I am your AI Cricket Intelligence Assistant. Ask me anything about cricket.</div>
                 </div>
             `;
             ensureActiveSession();
