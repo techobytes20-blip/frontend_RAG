@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://backend-rag-model.onrender.com';
 
 // Global Application State
 let token = localStorage.getItem('token') || null;
