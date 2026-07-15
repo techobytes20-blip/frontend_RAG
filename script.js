@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://backend-rag-model.onrender.com';
+const API_BASE_URL = 'http://localhost:5000';
 
 // Global Application State
 let token = localStorage.getItem('token') || null;
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Auto-login if token is cached
     if (token) {
+        document.getElementById('authSection').classList.add('hidden');
         await verifyAndLoadUser();
     } else {
         updateUIState(false);
@@ -427,7 +428,7 @@ function initAuth() {
 
             authStatus.className = 'status-message status-success';
             authStatus.innerText = 'Success: ' + (data.message || 'OTP resent successfully.');
-            
+
             // Restart countdown
             startResendTimer();
 
@@ -944,7 +945,7 @@ async function submitQuiz() {
         // Score Card
         document.getElementById('resultScore').innerText = `${data.score}/${data.totalQuestions}`;
 
-        // Cric Points Change
+        // Cric Coins Change
         const pointsDiffEl = document.getElementById('pointsDiff');
         if (data.pointsEarned >= 0) {
             pointsDiffEl.className = 'points-positive';
@@ -958,7 +959,7 @@ async function submitQuiz() {
 
         // Dynamically update navbar statistics
         if (currentUser) {
-            currentUser.cricPoints = data.cumulativePoints;
+            currentUser.cricCoins = data.cumulativePoints;
         }
 
         // Refresh profile data to sync attempt log and ranks in the sidebar
@@ -1057,7 +1058,7 @@ async function showQuizAttemptDetails(attemptId) {
             pointsDiffEl.innerText = `${data.pointsEarned}`;
         }
 
-        document.getElementById('resultCumulativePoints').innerText = currentUser ? currentUser.cricPoints : 0;
+        document.getElementById('resultCumulativePoints').innerText = currentUser ? currentUser.cricCoins : 0;
 
         // Render reviews
         reviewContainer.innerHTML = '';
@@ -1176,8 +1177,8 @@ function updateProfileDrawerUI() {
         initialsEl.innerText = getUserInitials(currentUser.name);
     }
 
-    // Cric Points Card rendering
-    const points = currentUser.cricPoints || 0;
+    // Cric Coins Card rendering
+    const points = currentUser.cricCoins || 0;
     const rankInfo = getRankInfo(points);
 
     const rankEl = document.getElementById('pointsCardRank');
@@ -1186,7 +1187,7 @@ function updateProfileDrawerUI() {
         rankEl.className = `rank-badge ${rankInfo.class}`;
     }
 
-    document.getElementById('pointsCardValue').innerText = `${points} pts`;
+    document.getElementById('pointsCardValue').innerText = `${points} coins`;
     const progressLabelEl = document.getElementById('pointsCardProgressLabel');
     if (progressLabelEl) {
         progressLabelEl.innerText = rankInfo.label;
@@ -1209,10 +1210,10 @@ async function renderDrawerDetail(targetKey) {
     contentEl.innerHTML = '';
 
     if (targetKey === 'points') {
-        titleEl.innerText = 'Cric Points Breakdown';
+        titleEl.innerText = 'Cric Coins Breakdown';
 
         // Sum total score points breakdown
-        const totalPoints = currentUser ? currentUser.cricPoints : 0;
+        const totalPoints = (currentUser && currentUser.cricCoins) || 0;
         let quizEarnings = 0;
         if (Array.isArray(userAttempts)) {
             userAttempts.forEach(a => {
@@ -1225,11 +1226,11 @@ async function renderDrawerDetail(targetKey) {
             <div class="points-breakdown-list">
                 <div class="points-breakdown-row" style="border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px; margin-bottom: 8px;">
                     <span class="label" style="font-weight: 500;">Total Score Points</span>
-                    <span class="value" style="color:#ffd700; font-size:1.25rem; font-weight:700;">${totalPoints} pts</span>
+                    <span class="value" style="color:#ffd700; font-size:1.25rem; font-weight:700;">${totalPoints} coins</span>
                 </div>
                 <div class="points-breakdown-row">
                     <span class="label">📝 Quiz Earned Points</span>
-                    <span class="value">${quizEarnings} pts</span>
+                    <span class="value">${quizEarnings} coins</span>
                 </div>
             </div>
         `;
@@ -1245,7 +1246,7 @@ async function renderDrawerDetail(targetKey) {
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                    <p class="empty-message">No quiz attempts yet. Start a quiz to earn Cric Points.</p>
+                    <p class="empty-message">No quiz attempts yet. Start a quiz to earn Cric Coins.</p>
                     <button id="drawerStartQuizBtn" class="btn btn-primary" style="margin-top:10px;">Start Quiz</button>
                 </div>
             `;
@@ -1285,7 +1286,7 @@ async function renderDrawerDetail(targetKey) {
                         </div>
                         <div class="history-card-row" style="margin-top:8px; border-top:1px solid rgba(255,255,255,0.03); padding-top:6px;">
                             <span style="font-size:0.8rem; color:var(--text-secondary);">Points earned</span>
-                            <span class="history-card-points ${pointsClass}">${pointsSign} pts</span>
+                            <span class="history-card-points ${pointsClass}">${pointsSign} coins</span>
                         </div>
                     </div>
                 `;

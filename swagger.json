@@ -72,7 +72,7 @@
                                                 "name": {
                                                     "type": "string"
                                                 },
-                                                "cricPoints": {
+                                                "cricCoins": {
                                                     "type": "integer"
                                                 }
                                             }
@@ -188,7 +188,7 @@
                                                 "name": {
                                                     "type": "string"
                                                 },
-                                                "cricPoints": {
+                                                "cricCoins": {
                                                     "type": "integer"
                                                 }
                                             }
@@ -207,7 +207,7 @@
         "/auth/profile": {
             "get": {
                 "summary": "Get authenticated user profile and quiz history",
-                "description": "Retrieves the user's information, cumulative Cric Points, and history of previous quiz attempts.",
+                "description": "Retrieves the user's information, cumulative Cric Coins, and history of previous quiz attempts.",
                 "responses": {
                     "200": {
                         "description": "Profile data retrieved successfully.",
@@ -228,7 +228,7 @@
                                                 "name": {
                                                     "type": "string"
                                                 },
-                                                "cricPoints": {
+                                                "cricCoins": {
                                                     "type": "integer"
                                                 },
                                                 "createdAt": {
@@ -443,7 +443,7 @@
         "/quiz/submit": {
             "post": {
                 "summary": "Submit quiz answers and earn points",
-                "description": "Grades the submitted answers on the server side, calculates score (+5 per correct, -1 per wrong), updates cumulative Cric Points, and logs the attempt.",
+                "description": "Grades the submitted answers on the server side, calculates score (+5 per correct, -1 per wrong), updates cumulative Cric Coins, and logs the attempt.",
                 "requestBody": {
                     "required": true,
                     "content": {
